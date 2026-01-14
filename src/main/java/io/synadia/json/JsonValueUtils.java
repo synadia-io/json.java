@@ -62,6 +62,16 @@ public abstract class JsonValueUtils {
         return v == null ? dflt : valueSupplier.get(v);
     }
 
+    /**
+     * Read a key's value and extract the value using the value supplied
+     * @param jv the jsonValue that is an object (type is JsonValue.JsonValueType.MAP)
+     * @param key the key to look up
+     * @param dflt the default value for error conditions, like wrong type or not found
+     * @param requiredType the required type of the value found with the key
+     * @param valueSupplier the value supplier
+     * @return the value
+     * @param <T> the supplied type
+     */
     @Nullable
     public static <T> T read(@Nullable JsonValue jv, @NonNull String key, @Nullable T dflt, @NonNull JsonValueType requiredType, @NonNull JsonValueSupplier<T> valueSupplier) {
         if (jv == null || jv.map == null) {
@@ -406,10 +416,17 @@ public abstract class JsonValueUtils {
         return convertToList(jv.array, converter);
     }
 
+    /**
+     * Convert a list of JsonValue to another type of list
+     * @param list the source list
+     * @param converter the converter function
+     * @return the resulting list
+     * @param <T> the output type of the conversion list
+     */
     @NonNull
-    public static <T> List<T> convertToList(@NonNull List<JsonValue> array, @NonNull Function<JsonValue, T> converter) {
+    public static <T> List<T> convertToList(@NonNull List<JsonValue> list, @NonNull Function<JsonValue, T> converter) {
         List<T> result = new ArrayList<>();
-        for (JsonValue jvv : array) {
+        for (JsonValue jvv : list) {
             T t = converter.apply(jvv);
             if (t != null) {
                 result.add(t);
@@ -471,6 +488,12 @@ public abstract class JsonValueUtils {
         return source == null ? Collections.emptyList() : convertToStringList(source);
     }
 
+    /**
+     * Convert a list of JsonValue to a list of Strings. Ignores any JsonValue that is not a string.
+     * It does not stringify numbers!
+     * @param source the source list
+     * @return the list of String
+     */
     @NonNull
     public static List<String> convertToStringList(@NonNull List<JsonValue> source) {
         List<String> result = new ArrayList<>();
@@ -510,6 +533,11 @@ public abstract class JsonValueUtils {
         return source == null ? Collections.emptyList() : convertToIntegerList(source);
     }
 
+    /**
+     * Convert a list of JsonValue to a list of Integer. Ignores any JsonValue that is not an int or long
+     * @param source the source list
+     * @return the list of Integer
+     */
     @NonNull
     public static List<Integer> convertToIntegerList(@NonNull List<JsonValue> source) {
         List<Integer> result = new ArrayList<>();
@@ -550,6 +578,11 @@ public abstract class JsonValueUtils {
         return source == null ? Collections.emptyList() : convertToLongList(source);
     }
 
+    /**
+     * Convert a list of JsonValue to a list of Long. Ignores any JsonValue that is not a long
+     * @param source the source list
+     * @return the list of Long
+     */
     @NonNull
     public static List<Long> convertToLongList(@NonNull List<JsonValue> source) {
         List<Long> result = new ArrayList<>();

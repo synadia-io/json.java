@@ -22,8 +22,21 @@ import java.io.IOException;
  * The exception thrown when the {@code JsonParser} cannot parse
  */
 public class JsonParseException extends IOException {
+
     /**
-     * Constructs an {@code JsonParseException} with the specified detail message.
+     * The text for the default version of a {@code JsonParseException}
+     */
+    public static final String INVALID_VALUE = "Invalid value.";
+
+    /**
+     * Constructs a {@code JsonParseException} with the message {@value #INVALID_VALUE}.
+     */
+    public JsonParseException() {
+        super(INVALID_VALUE);
+    }
+
+    /**
+     * Constructs a {@code JsonParseException} with the specified detail message.
      *
      * @param message
      *        The detail message (which is saved for later retrieval
@@ -34,7 +47,7 @@ public class JsonParseException extends IOException {
     }
 
     /**
-     * Constructs an {@code JsonParseException} with the specified detail message
+     * Constructs a {@code JsonParseException} with the specified detail message
      * and cause.
      *
      * <p> Note that the detail message associated with {@code cause} is
@@ -55,7 +68,7 @@ public class JsonParseException extends IOException {
     }
 
     /**
-     * Constructs an {@code JsonParseException} with the specified cause and a
+     * Constructs a {@code JsonParseException} with the specified cause and a
      * detail message of {@code (cause==null ? null : cause.toString())}
      * (which typically contains the class and detail message of {@code cause}).
      * This constructor is useful for IO exceptions that are little more

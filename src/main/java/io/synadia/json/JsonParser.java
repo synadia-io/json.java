@@ -44,7 +44,6 @@ public class JsonParser {
         KEEP_NULLS
     }
 
-    public static final String INVALID_VALUE = "Invalid value.";
     private static final boolean[] IS_DELIMITER = new boolean[128];
 
     static {
@@ -658,11 +657,11 @@ public class JsonParser {
                     try {
                         double d = Double.parseDouble(val);
                         if(Double.isNaN(d) || Double.isInfinite(d)) {
-                            throw new JsonParseException(INVALID_VALUE);
+                            throw new JsonParseException();
                         }
                         return new JsonValue(d);
                     } catch (NumberFormatException ignore) {
-                        throw new JsonParseException(INVALID_VALUE);
+                        throw new JsonParseException();
                     }
                 }
             }
@@ -671,13 +670,13 @@ public class JsonParser {
             if(initial == '0' && val.length() > 1) {
                 char at1 = val.charAt(1);
                 if(at1 >= '0' && at1 <= '9') {
-                    throw new JsonParseException(INVALID_VALUE);
+                    throw new JsonParseException();
                 }
             } else if (initial == '-' && val.length() > 2) {
                 char at1 = val.charAt(1);
                 char at2 = val.charAt(2);
                 if(at1 == '0' && at2 >= '0' && at2 <= '9') {
-                    throw new JsonParseException(INVALID_VALUE);
+                    throw new JsonParseException();
                 }
             }
 
@@ -694,11 +693,11 @@ public class JsonParser {
                     BigInteger bi = new BigInteger(val);
                     return new JsonValue(bi);
                 } catch (NumberFormatException ex) {
-                    throw new JsonParseException(INVALID_VALUE);
+                    throw new JsonParseException();
                 }
             }
         }
-        throw new JsonParseException(INVALID_VALUE);
+        throw new JsonParseException();
     }
 
     static boolean isDecimalNotation(final String val) {

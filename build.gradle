@@ -1,7 +1,6 @@
 import aQute.bnd.gradle.Bundle
 
 plugins {
-    id("java")
     id("java-library")
     id("maven-publish")
     id("jacoco")
@@ -25,6 +24,8 @@ version = isRelease ? jarVersion : jarVersion + "-SNAPSHOT" // version is the va
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     targetCompatibility = targetCompat
+    withSourcesJar()
+    withJavadocJar()
 }
 
 repositories {
@@ -46,16 +47,11 @@ tasks.register('bundle', Bundle) {
     from sourceSets.main.output
 }
 
-java {
-    withSourcesJar()
-    withJavadocJar()
-}
-
 jar {
     bundle {
         bnd("Bundle-Name": "io.synadia.jnats.json",
                 "Bundle-Vendor": "synadia.io",
-                "Bundle-Description": "JNats Json Utils",
+                "Bundle-Description": "JNats JSON Utility",
                 "Bundle-DocURL": "https://github.com/synadia-io/jnats.json",
                 "Target-Compatibility": "Java " + targetCompat
         )
@@ -75,7 +71,7 @@ javadoc {
     failOnError = false
     options.overview = 'src/main/javadoc/overview.html' // relative to source root
     source = sourceSets.main.allJava
-    title = "NATS.IO JNats JSON"
+    title = "JNats JSON Utility"
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -105,27 +101,27 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
-            artifact sourcesJar
-            artifact javadocJar
             pom {
-                name = jarAndArtifactName
-                packaging = 'jar'
+                name = 'JNats JSON Utility'
+                description = 'JSON Parser originally built for JNATS'
+                url = 'https://github.com/synadia-io/jnats.json'
+
                 groupId = group
                 artifactId = jarAndArtifactName
-                description = 'JSON Parser built specifically for JNATS'
-                url = 'https://github.com/synadia-io/jnats.json'
+
                 licenses {
                     license {
                         name = 'The Apache License, Version 2.0'
                         url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                     }
                 }
+
                 developers {
                     developer {
-                        id = "synadia"
-                        name = "Synadia"
-                        email = "info@synadia.com"
-                        url = "https://synadia.io"
+                        id = 'synadia'
+                        name = 'Synadia'
+                        email = 'info@synadia.com'
+                        url = 'https://synadia.io'
                     }
                 }
                 scm {
