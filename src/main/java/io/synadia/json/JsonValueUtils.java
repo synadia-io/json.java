@@ -331,8 +331,8 @@ public abstract class JsonValueUtils {
      */
     @NonNull
     public static Map<String, JsonValue> readMapMapOrEmpty(@Nullable JsonValue jv, @NonNull String key) {
-        JsonValue jvv = readMapObjectOrNull(jv, key);
-        return jvv == null || jvv.map == null ? EMPTY_MAP_MAP : jvv.map;
+        Map<String, JsonValue> map = readMapMapOrNull(jv, key);
+        return map == null ? EMPTY_MAP_MAP : map;
     }
 
     /**

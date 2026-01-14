@@ -812,11 +812,11 @@ public final class JsonParsingTests {
     }
 
     @Test
-    public void testBasics() {
+    public void testBasicsEqualsAndHashcode() {
         Map<String, JsonValue> map1 = new HashMap<>();
-        map1.put("key", new JsonValue("value2"));
+        map1.put("key1", new JsonValue("value1"));
         Map<String, JsonValue> map2 = new HashMap<>();
-        map1.put("key", new JsonValue("value2"));
+        map2.put("key2", new JsonValue("value2"));
         List<JsonValue> list1 = new ArrayList<>();
         list1.add(new JsonValue("item1"));
         List<JsonValue> list2 = new ArrayList<>();
@@ -839,14 +839,15 @@ public final class JsonParsingTests {
             new JsonValue(3.15f),
             new JsonValue(new BigDecimal("123.456")),
             new JsonValue(new BigDecimal("321.456")),
-            new JsonValue(new BigInteger("123456789012345")),
-            new JsonValue(new BigInteger("134567890123456")),
+            new JsonValue(new BigInteger("123456")),
+            new JsonValue(new BigInteger("123457")),
             new JsonValue(map1),
             new JsonValue(map2),
             new JsonValue(list1),
             new JsonValue(list2),
             new JsonValue(array1),
-            new JsonValue(array2)
+            new JsonValue(array2),
+            JsonValue.NULL
         };
         for (int i = 0; i < jvs.length; i++) {
             for (int j = 0; j < jvs.length; j++) {
@@ -860,5 +861,54 @@ public final class JsonParsingTests {
                 }
             }
         }
+
+        //noinspection ConstantValue,SimplifiableAssertion
+        assertFalse(jvs[0].equals(null));
+
+        //noinspection SimplifiableAssertion,EqualsBetweenInconvertibleTypes
+        assertFalse(jvs[0].equals("string"));
+    }
+
+    @Test
+    public void testMapOrder() {
+        Map<String, JsonValue> map = new HashMap<>();
+        map.put("key1", new JsonValue("value1"));
+        map.put("key2", new JsonValue("value2"));
+        map.put("key3", new JsonValue("value3"));
+        JsonValue jv = new JsonValue(map);
+
+        jv.addMapOrder("key1");
+        jv.addMapOrder("key2");
+        jv.addMapOrder("key3");
+
+        String json = jv.toJson();
+        int x1 = json.indexOf("key1");
+        int x2 = json.indexOf("key2");
+        int x3 = json.indexOf("key3");
+        assertTrue(x1 < x2);
+        assertTrue(x1 < x3);
+        assertTrue(x2 < x3);
+
+        jv.setMapOrder("key2", "key3", "key1");
+        json = jv.toJson();
+        x1 = json.indexOf("key2");
+        x2 = json.indexOf("key3");
+        x3 = json.indexOf("key1");
+        assertTrue(x1 < x2);
+        assertTrue(x1 < x3);
+        assertTrue(x2 < x3);
+
+        jv.setMapOrder(Arrays.asList("key3", "key1", "key2"));
+        json = jv.toJson();
+        x1 = json.indexOf("key3");
+        x2 = json.indexOf("key1");
+        x3 = json.indexOf("key2");
+        assertTrue(x1 < x2);
+        assertTrue(x1 < x3);
+        assertTrue(x2 < x3);
+
+        assertThrows(IllegalStateException.class, () -> new JsonValue("not a map").addMapOrder("key"));
+        assertThrows(IllegalStateException.class, () -> new JsonValue("not a map").setMapOrder("key"));
+        assertThrows(IllegalStateException.class, () -> new JsonValue("not a map").setMapOrder(Arrays.asList("key", "another")));
     }
 }

@@ -63,15 +63,31 @@ public final class JsonValueUtilsTests {
     private static final String NOT_A_KEY = "not-a-key";
 
     @Test
+    public void testReadValue() {
+        assertNotNull(readValue(TEST_JV, STRING));
+        assertNull(readValue(null, STRING));
+        assertNull(readValue(NULL, STRING));
+    }
+
+    @Test
     public void testRead() {
         assertNotNull(read(TEST_JV, STRING, null, v -> v));
-
         // these JsonValues are not MAPS
         assertNull(read(null, NOT_A_KEY, null, v -> v));
         assertNull(read(EMPTY_ARRAY, NOT_A_KEY, null, v -> v));
         assertNull(read(TRUE, NOT_A_KEY, null, v -> v));
         assertNull(read(FALSE, NOT_A_KEY, null, v -> v));
         assertNull(read(NULL, NOT_A_KEY, null, v -> v));
+
+        assertNotNull(read(TEST_JV, STRING, null, JsonValueType.STRING, v -> v));
+        // these wrong requiredType
+        assertNull(read(TEST_JV, STRING, null, JsonValueType.INTEGER, v -> v));
+        // these JsonValues are not MAPS
+        assertNull(read(null, NOT_A_KEY, null, JsonValueType.STRING, v -> v));
+        assertNull(read(EMPTY_ARRAY, NOT_A_KEY, null, JsonValueType.STRING, v -> v));
+        assertNull(read(TRUE, NOT_A_KEY, null, JsonValueType.STRING, v -> v));
+        assertNull(read(FALSE, NOT_A_KEY, null, JsonValueType.STRING, v -> v));
+        assertNull(read(NULL, NOT_A_KEY, null, JsonValueType.STRING, v -> v));
     }
 
     @Test
@@ -293,6 +309,30 @@ public final class JsonValueUtilsTests {
             assertEquals("ss", strmap.get("s"));
             assertNull(strmap.get("i"));
         }
+
+        assertNotNull(readMapMapOrNull(TEST_JV, SMAP));
+        assertNotNull(readMapMapOrEmpty(TEST_JV, SMAP));
+        assertNull(readMapMapOrNull(TEST_JV, NOT_A_KEY));
+        assertSame(EMPTY_MAP_MAP, readMapMapOrEmpty(TEST_JV, NOT_A_KEY));
+        assertNull(readMapMapOrNull(TEST_JV, STRING));
+        assertSame(EMPTY_MAP_MAP, readMapMapOrEmpty(TEST_JV, STRING));
+    }
+
+    @Test
+    public void testConvertToList() {
+        List<JsonValue> list = new ArrayList<>();
+        list.add(JsonValue.NULL);
+        list.add(readValue(TEST_JV, STRING));
+
+        List<String> strings = convertToList(list, jv -> {
+            if (jv.type == JsonValueType.STRING) {
+                return jv.string;
+            }
+            return null;
+        });
+
+        assertEquals(1, strings.size());
+        assertEquals(STRING_STRING, strings.getFirst());
     }
 
     @Test

@@ -382,12 +382,12 @@ public abstract class JsonWriteUtils {
      */
     public static ListValueResolver<String> STRING_LIST_RESOLVER = new ListValueResolver<>() {
         @Override
-        public boolean appendable(String s) {
+        public boolean appendable(@Nullable String s) {
             return s != null && !s.isEmpty();
         }
 
         @Override
-        public void append(StringBuilder sb, String s) {
+        public void append(@NonNull StringBuilder sb, @Nullable String s) {
             sb.append(Q);
             jsonEncode(sb, s);
             sb.append(Q);

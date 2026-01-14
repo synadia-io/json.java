@@ -14,6 +14,9 @@
 
 package io.synadia.json;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+
 /**
  * Interface used when adding a generic list
  *
@@ -27,15 +30,15 @@ public interface ListValueResolver<T> {
      * @param t the object
      * @return true for appendable
      */
-    default boolean appendable(T t) {
+    default boolean appendable(@Nullable T t) {
         return t != null;
     }
 
     /**
      * Append the object's JSON value representation
      *
-     * @param sb the target SringBuilder
+     * @param sb the target StringBuilder
      * @param t  the object
      */
-    void append(StringBuilder sb, T t);
+    void append(@NonNull StringBuilder sb, @Nullable T t);
 }

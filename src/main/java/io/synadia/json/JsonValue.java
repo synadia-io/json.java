@@ -411,6 +411,37 @@ public class JsonValue implements JsonSerializable {
         }
     }
 
+    public void setMapOrder(String... keys) {
+        if (mapOrder == null) {
+            throw new IllegalStateException("JsonValue does not represent a map.");
+        }
+        mapOrder.clear();
+        if (keys != null) {
+            for (String key : keys) {
+                mapOrder.add(key);
+            }
+        }
+    }
+
+    public void setMapOrder(List<String> keys) {
+        if (mapOrder == null) {
+            throw new IllegalStateException("JsonValue does not represent a map.");
+        }
+        mapOrder.clear();
+        if (keys != null) {
+            for (String key : keys) {
+                mapOrder.add(key);
+            }
+        }
+    }
+
+    public void addMapOrder(String key) {
+        if (mapOrder == null) {
+            throw new IllegalStateException("JsonValue does not represent a map.");
+        }
+        mapOrder.add(key);
+    }
+
     /**
      * Create a JSON string using the class simple name as the key for the entire object
      * @param c the class
@@ -462,7 +493,7 @@ public class JsonValue implements JsonSerializable {
     @SuppressWarnings("DataFlowIssue") // by checking the type we know that the map is not null
     private String mapString() {
         StringBuilder sbo = JsonWriteUtils.beginJson();
-        if (mapOrder != null && !mapOrder.isEmpty()) {
+        if (!mapOrder.isEmpty()) {
             for (String key : mapOrder) {
                 JsonWriteUtils.addField(sbo, key, map.get(key));
             }
@@ -485,6 +516,7 @@ public class JsonValue implements JsonSerializable {
         return JsonWriteUtils.endArray(sba).toString();
     }
 
+    @SuppressWarnings("DataFlowIssue") //  can't be TYPE if type value was null
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -493,21 +525,26 @@ public class JsonValue implements JsonSerializable {
         JsonValue jsonValue = (JsonValue) o;
 
         if (type != jsonValue.type) return false;
-        if (!Objects.equals(map, jsonValue.map)) return false;
-        if (!Objects.equals(array, jsonValue.array)) return false;
-        if (!Objects.equals(string, jsonValue.string)) return false;
-        if (!Objects.equals(bool, jsonValue.bool)) return false;
-        if (!Objects.equals(i, jsonValue.i)) return false;
-        if (!Objects.equals(l, jsonValue.l)) return false;
-        if (!Objects.equals(d, jsonValue.d)) return false;
-        if (!Objects.equals(f, jsonValue.f)) return false;
-        if (!Objects.equals(bd, jsonValue.bd)) return false;
-        return Objects.equals(bi, jsonValue.bi);
+
+        return switch (type) {
+            case STRING -> string.equals(jsonValue.string);
+            case BOOL -> bool.equals(jsonValue.bool);
+            case INTEGER -> i.equals(jsonValue.i);
+            case LONG -> l.equals(jsonValue.l);
+            case DOUBLE -> d.equals(jsonValue.d);
+            case FLOAT -> f.equals(jsonValue.f);
+            case BIG_DECIMAL -> bd.equals(jsonValue.bd);
+            case BIG_INTEGER -> bi.equals(jsonValue.bi);
+            case MAP -> map.equals(jsonValue.map);
+            case ARRAY -> array.equals(jsonValue.array);
+            case NULL -> true; // null has null value, type was already checked.
+        };
     }
 
+    @SuppressWarnings("DataFlowIssue") //  can't be TYPE if type value was null
     @Override
     public int hashCode() {
-        return 31 * type.hashCode() +
+        return (31 *
             switch (type) {
                 case STRING -> string.hashCode();
                 case BOOL -> bool.hashCode();
@@ -520,6 +557,7 @@ public class JsonValue implements JsonSerializable {
                 case MAP -> map.hashCode();
                 case ARRAY -> array.hashCode();
                 default -> 0;
-            };
+            })
+            + type.hashCode();
     }
 }
