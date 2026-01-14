@@ -9,11 +9,11 @@ It was originally extracted and repackaged from the JNATS library.
 **Current Release**: 0.0.0 &nbsp; **Current Snapshot**: 3.0.0-SNAPSHOT
 
 [![License Apache 2](https://img.shields.io/badge/License-Apache2-blue.svg)](https://www.apache.org/licenses/LICENSE-2.0)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.synadia/jnats-json21/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.synadia/jnats-json21)
-[![Javadoc](http://javadoc.io/badge/io.synadia/jnats-json21.svg?branch=main)](http://javadoc.io/doc/io.synadia/jnats-json21?branch=main)
-[![Coverage Status](https://coveralls.io/repos/github/synadia-io/json.java21/badge.svg?branch=main)](https://coveralls.io/github/synadia-io/json.java21?branch=main)
-[![Build Main Badge](https://github.com/synadia-io/json.java21/actions/workflows/build-main.yml/badge.svg?event=push)](https://github.com/synadia-io/json.java21/actions/workflows/build-main.yml)
-[![Release Badge](https://github.com/synadia-io/json.java21/actions/workflows/build-release.yml/badge.svg?event=release)](https://github.com/synadia-io/json.java21/actions/workflows/build-release.yml)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.synadia/jnats-json/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.synadia/jnats-json)
+[![Javadoc](http://javadoc.io/badge/io.synadia/jnats-json.svg?branch=main)](http://javadoc.io/doc/io.synadia/jnats-json?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/synadia-io/json.java/badge.svg?branch=main)](https://coveralls.io/github/synadia-io/json.java?branch=main)
+[![Build Main Badge](https://github.com/synadia-io/json.java/actions/workflows/build-main.yml/badge.svg?event=push)](https://github.com/synadia-io/json.java/actions/workflows/build-main.yml)
+[![Release Badge](https://github.com/synadia-io/json.java/actions/workflows/build-release.yml/badge.svg?event=release)](https://github.com/synadia-io/json.java/actions/workflows/build-release.yml)
 
 ### Gradle
 
