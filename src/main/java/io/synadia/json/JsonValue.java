@@ -1,4 +1,7 @@
-// Copyright 2025 Synadia Communications, Inc.
+// Copyright 2023 The NATS Authors
+//
+// Modifications Copyright 2025-2026 Synadia Communications, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -504,17 +507,19 @@ public class JsonValue implements JsonSerializable {
 
     @Override
     public int hashCode() {
-        int result = map != null ? map.hashCode() : 0;
-        result = 31 * result + (array != null ? array.hashCode() : 0);
-        result = 31 * result + (string != null ? string.hashCode() : 0);
-        result = 31 * result + (bool != null ? bool.hashCode() : 0);
-        result = 31 * result + (i != null ? i.hashCode() : 0);
-        result = 31 * result + (l != null ? l.hashCode() : 0);
-        result = 31 * result + (d != null ? d.hashCode() : 0);
-        result = 31 * result + (f != null ? f.hashCode() : 0);
-        result = 31 * result + (bd != null ? bd.hashCode() : 0);
-        result = 31 * result + (bi != null ? bi.hashCode() : 0);
-        result = 31 * result + type.hashCode();
-        return result;
+        return 31 * type.hashCode() +
+            switch (type) {
+                case STRING -> string.hashCode();
+                case BOOL -> bool.hashCode();
+                case INTEGER -> i.hashCode();
+                case LONG -> l.hashCode();
+                case DOUBLE -> d.hashCode();
+                case FLOAT -> f.hashCode();
+                case BIG_DECIMAL -> bd.hashCode();
+                case BIG_INTEGER -> bi.hashCode();
+                case MAP -> map.hashCode();
+                case ARRAY -> array.hashCode();
+                default -> 0;
+            };
     }
 }

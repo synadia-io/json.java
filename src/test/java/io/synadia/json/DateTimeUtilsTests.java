@@ -1,4 +1,7 @@
-// Copyright 2025 Synadia Communications, Inc.
+// Copyright 2025 The NATS Authors
+//
+// Modifications Copyright 2025-2026 Synadia Communications, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
