@@ -15,7 +15,7 @@ def jarVersion = "3.0.0"
 group = 'io.synadia'
 
 def isRelease = System.getenv("BUILD_EVENT") == "release"
-def tc = System.getenv("TARGET_COMPATIBILITY");
+def tc = System.getenv("TARGET_COMPATIBILITY")
 def targetCompat = tc == "25" ? JavaVersion.VERSION_25 : JavaVersion.VERSION_21
 def jarEnd =       tc == "25" ?  "-jdk25"              : ""
 def jarAndArtifactName = "jnats-json" + jarEnd
@@ -60,11 +60,6 @@ jar {
                 "Target-Compatibility": "Java " + targetCompat
         )
     }
-}
-
-java {
-    withSourcesJar()
-    withJavadocJar()
 }
 
 test {

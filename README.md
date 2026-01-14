@@ -1,6 +1,6 @@
 ![NATS](src/main/javadoc/images/large-logo.png)
 
-# JNATS JSON JAVA 21
+# JNATS JSON JAVA
 
 This library is a JSON Parser built specifically for JNATS to avoid a third party library dependency, and using Java 21 
 
