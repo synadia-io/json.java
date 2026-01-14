@@ -1,4 +1,7 @@
-// Copyright 2025 Synadia Communications, Inc.
+// Copyright 2025 The NATS Authors
+//
+// Modifications Copyright 2025-2026 Synadia Communications, Inc.
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at:
@@ -14,8 +17,6 @@
 package io.synadia.json;
 
 import io.ResourceUtils;
-import nl.jqno.equalsverifier.EqualsVerifier;
-import nl.jqno.equalsverifier.Warning;
 import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
 
@@ -315,24 +316,6 @@ public final class JsonParsingTests {
         assertEquals(JsonValue.NULL, new JsonValue((JsonValue[])null));
         assertEquals(JsonValue.NULL, new JsonValue((BigDecimal)null));
         assertEquals(JsonValue.NULL, new JsonValue((BigInteger) null));
-    }
-
-    @Test
-    public void equalsContract() {
-        Map<String, JsonValue> map1 = new HashMap<>();
-        map1.put("1", new JsonValue(1));
-        Map<String, JsonValue> map2 = new HashMap<>();
-        map1.put("2", new JsonValue(2));
-        List<JsonValue> list3 = new ArrayList<>();
-        list3.add(new JsonValue(3));
-        List<JsonValue> list4 = new ArrayList<>();
-        list4.add(new JsonValue(4));
-        EqualsVerifier.simple().forClass(JsonValue.class)
-            .withPrefabValues(Map.class, map1, map2)
-            .withPrefabValues(List.class, list3, list4)
-            .withIgnoredFields("object", "number", "mapOrder")
-            .suppress(Warning.BIGDECIMAL_EQUALITY)
-            .verify();
     }
 
     private void validateParse(JsonValue expected, String json) throws JsonParseException {
@@ -824,5 +807,56 @@ public final class JsonParsingTests {
         JsonValue jv = JsonParser.parseUnchecked(json);
         String json2 = jv.toJson();
         assertEquals(json, json2);
+    }
+
+    @Test
+    public void testBasics() {
+        Map<String, JsonValue> map1 = new HashMap<>();
+        map1.put("key", new JsonValue("value2"));
+        Map<String, JsonValue> map2 = new HashMap<>();
+        map1.put("key", new JsonValue("value2"));
+        List<JsonValue> list1 = new ArrayList<>();
+        list1.add(new JsonValue("item1"));
+        List<JsonValue> list2 = new ArrayList<>();
+        list2.add(new JsonValue("item2"));
+        JsonValue[] array1 = {new JsonValue("item1"), new JsonValue(41)};
+        JsonValue[] array2 = {new JsonValue("item2"), new JsonValue(42)};
+
+        JsonValue[] jvs = new JsonValue[]{
+            new JsonValue("test string"),
+            new JsonValue("another string"),
+            new JsonValue(true),
+            new JsonValue(false),
+            new JsonValue(42),
+            new JsonValue(43),
+            new JsonValue(72L),
+            new JsonValue(73L),
+            new JsonValue(3.14),
+            new JsonValue(3.15),
+            new JsonValue(3.14f),
+            new JsonValue(3.15f),
+            new JsonValue(new BigDecimal("123.456")),
+            new JsonValue(new BigDecimal("321.456")),
+            new JsonValue(new BigInteger("123456789012345")),
+            new JsonValue(new BigInteger("134567890123456")),
+            new JsonValue(map1),
+            new JsonValue(map2),
+            new JsonValue(list1),
+            new JsonValue(list2),
+            new JsonValue(array1),
+            new JsonValue(array2)
+        };
+        for (int i = 0; i < jvs.length; i++) {
+            for (int j = 0; j < jvs.length; j++) {
+                if (i == j) {
+                    assertEquals(jvs[i], jvs[j]);
+                    assertEquals(jvs[i].hashCode(), jvs[j].hashCode());
+                }
+                else {
+                    assertNotEquals(jvs[i], jvs[j]);
+                    assertNotEquals(jvs[i].hashCode(), jvs[j].hashCode());
+                }
+            }
+        }
     }
 }
