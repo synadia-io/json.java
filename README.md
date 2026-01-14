@@ -19,7 +19,7 @@ It was originally extracted and repackaged from the JNATS library.
 
 ```groovy
 dependencies {
-    implementation 'io.synadia:jnats-json-21:{major.minor.patch}'
+    implementation 'io.synadia:jnats-json:{major.minor.patch}'
 }
 ```
 
@@ -29,7 +29,7 @@ If you need the latest and greatest before Maven central updates, you can use:
 repositories {
     mavenCentral()
     maven {
-      url "https://repo1.maven.org/maven2/"
+        url "https://repo1.maven.org/maven2/"
     }
 }
 ```
@@ -45,7 +45,7 @@ repositories {
 }
 
 dependencies {
-   implementation 'io.synadia:jnats-json-21:{major.minor.patch}-SNAPSHOT'
+   implementation 'io.synadia:jnats-json:{major.minor.patch}-SNAPSHOT'
 }
 ```
 
@@ -54,7 +54,7 @@ dependencies {
 ```xml
 <dependency>
     <groupId>io.synadia</groupId>
-    <artifactId>jnats-json-21</artifactId>
+    <artifactId>jnats-json</artifactId>
     <version>{major.minor.patch}</version>
 </dependency>
 ```
@@ -88,7 +88,7 @@ If you need a snapshot version, you must enable snapshots and change your depend
 
 <dependency>
     <groupId>io.synadia</groupId>
-    <artifactId>jnats-json-21</artifactId>
+    <artifactId>jnats-json</artifactId>
     <version>{major.minor.patch}-SNAPSHOT</version>
 </dependency>
 ```
