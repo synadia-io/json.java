@@ -44,5 +44,5 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true # Important: signals completion of parallel builds
+          parallel-finished: true
           carryforward: "jdk-21"
