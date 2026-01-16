@@ -6,14 +6,18 @@ on:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        jdk: [ 21, 25 ]
     runs-on: ubuntu-latest
     env:
       BUILD_EVENT: ${{ github.event_name }}
+      TARGET_COMPATIBILITY: ${{ matrix.jdk }}
     steps:
       - name: Setup JDK
         uses: actions/setup-java@v5
         with:
-          java-version: '21'
+          java-version: ${{ matrix.jdk }}
           distribution: 'temurin'
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v5
@@ -29,3 +33,16 @@ jobs:
         uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.COVERALLS_REPO_TOKEN }}
+          parallel: true
+          flag-name: jdk-${{ matrix.jdk }}
+
+  coveralls-finish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Coveralls Finish
+        uses: coverallsapp/github-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          parallel-finished: true # Important: signals completion of parallel builds
+          carryforward: "jdk-21"
